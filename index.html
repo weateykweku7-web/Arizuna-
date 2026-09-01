@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arizuna Ghana</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial;background:#f7f7f8;padding-bottom:75px}
+header{background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px #0001}
+header img{width:55px;height:55px;object-fit:contain;border-radius:10px}
+.greet{background:linear-gradient(135deg,#006b3f,#009e5f);color:#fff;padding:14px;text-align:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px #0001;text-align:center;padding-bottom:8px}
+.card img{width:100%;height:120px;object-fit:cover}.price{color:#006b3f;font-weight:bold}
+.card button{background:#000;color:#fff;border:0;padding:7px;border-radius:8px;width:90%;margin-top:6px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0}
+.bottom-nav button{border:0;background:0;font-size:11px;color:#666;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bottom-nav button.active{color:#006b3f;font-weight:bold}.bottom-nav i{font-size:18px}
+#adminPanel,#cartView{display:none;padding:12px}
+input{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
+.btn{background:#006b3f;color:#fff;border:0;padding:12px;border-radius:10px;width:100%;font-weight:bold}
+.cart-item{background:#fff;padding:10px;border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between}
+.pending{opacity:.6}.badge{font-size:10px;background:#ffe08a;padding:2px 6px;border-radius:10px}
+</style>
+</head>
+<body>
+<header><img src="./logo.png"><div><h1 style="margin:0;font-size:16px">ARIZUNA GHANA</h1><small>Ghana's Trusted Marketplace - BUY • SELL • GROW</small></div></header>
+<div class="greet"><h2 id="greetText">Welcome to Arizuna Ghana! 🇬🇭</h2><p style="margin:4px 0 0;font-size:12px">Pay on Delivery • Accra • Admin Approved ✅</p></div>
+<div id="homeView">
+<div style="padding:10px;display:flex;gap:8px;overflow:auto">
+<button onclick="filterCat('all')" class="btn" style="width:auto;padding:6px 12px">All</button>
+<button onclick="filterCat('shoes')" style="width:auto;padding:6px 12px;border:1px solid #006b3f;background:#fff;border-radius:10px;color:#006b3f">Shoes</button>
+<button onclick="filterCat('bags')" style="width:auto;padding:6px 12px;border:1px solid #006b3f;background:#fff;border-radius:10px;color:#006b3f">Bags</button>
+<button onclick="filterCat('watch')" style="width:auto;padding:6px 12px;border:1px solid #006b3f;background:#fff;border-radius:10px;color:#006b3f">Watch</button>
+</div>
+<div id="productGrid" class="grid"></div>
+</div>
+<div id="cartView"><h3>🛒 My Cart (<span id="cartCount">0</span>)</h3><div id="cartList"></div><button class="btn" style="background:#25D366;margin-top:10px" onclick="orderWhatsApp()">Order on WhatsApp</button></div>
+<div id="adminPanel">
+<h3>🛡️ Admin - Approval System</h3>
+<div id="loginBox"><input id="adminPass" type="password" placeholder="Password: arizuna123"><button class="btn" onclick="adminLogin()">Login as Admin</button></div>
+<div id="adminContent" style="display:none"><button class="btn" style="background:#c00" onclick="adminLogout()">Logout</button>
+<h4>Add Product (Needs Approval)</h4><input id="pName" placeholder="Name"><input id="pPrice" type="number" placeholder="Price GHS"><input id="pCat" placeholder="shoes/bags/watch"><input id="pImg" placeholder="Image URL"><button class="btn" onclick="addProduct()">Add Product</button>
+<h4>Pending Approval <span id="pendingCount"></span></h4><div id="pendingList"></div><h4>All Products</h4><div id="allProductsAdmin"></div></div>
+</div>
+<nav class="bottom-nav">
+<button id="nav-home" class="active" onclick="showView('home')"><i class="fa fa-home"></i>Home</button>
+<button onclick="showView('home')"><i class="fa fa-search"></i>Search</button>
+<button id="nav-cart" onclick="showView('cart')"><i class="fa fa-shopping-cart"></i>Cart <span id="navCartCount"></span></button>
+<button id="nav-admin" onclick="showView('admin')"><i class="fa fa-user-shield"></i>Admin</button>
+</nav>
+<script>
+let h=new Date().getHours();let gt=h<12?'Good Morning':h<18?'Good Afternoon':'Good Evening';document.getElementById('greetText').innerText=gt+', Welcome to Arizuna Ghana! 🇬🇭';let products=JSON.parse(localStorage.getItem('arizuna_products')||'null')||[{name:'Sneakers',price:250,cat:'shoes',img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400',approved:true},{name:'Handbag',price:180,cat:'bags',img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',approved:true},{name:'Watch',price:220,cat:'watch',img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',approved:true},{name:'Backpack',price:150,cat:'bags',img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400',approved:true},{name:'New Arizuna Shoe (Pending)',price:300,cat:'shoes',img:'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400',approved:false}];
+let cart=JSON.parse(localStorage.getItem('arizuna_cart')||'[]');let currentCat='all';let isAdmin=localStorage.getItem('arizuna_isAdmin')==='1';
+function save(){localStorage.setItem('arizuna_products',JSON.stringify(products));localStorage.setItem('arizuna_cart',JSON.stringify(cart));}
+function render(){let grid=document.getElementById('productGrid');grid.innerHTML='';let filtered=products.filter(p=>(currentCat==='all'||p.cat===currentCat)&&(p.approved||isAdmin));filtered.forEach(p=>{let idx=products.indexOf(p);let div=document.createElement('div');div.className='card'+(p.approved?'':' pending');div.innerHTML=`<img src="${p.img}"><b>${p.name}</b>${p.approved?'':' <span class=badge>Pending Approval</span>'}<div class=price>GHS ${p.price}</div><button onclick="addToCart(${idx})">Add to Cart</button>`;grid.appendChild(div);});document.getElementById('cartCount').innerText=cart.length;document.getElementById('navCartCount').innerText=cart.length?`(${cart.length})`:'';renderCart();renderAdmin();}
+function filterCat(c){currentCat=c;render();showView('home');}
+function showView(v){document.getElementById('homeView').style.display=v==='home'?'block':'none';document.getElementById('cartView').style.display=v==='cart'?'block':'none';document.getElementById('adminPanel').style.display=v==='admin'?'block':'none';document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active'));if(v==='home')document.getElementById('nav-home').classList.add('active');if(v==='cart')document.getElementById('nav-cart').classList.add('active');if(v==='admin')document.getElementById('nav-admin').classList.add('active');}
+function addToCart(idx){cart.push(products[idx]);save();render();alert(products[idx].name+' added');}
+function renderCart(){let list=document.getElementById('cartList');list.innerHTML='';if(cart.length===0)list.innerHTML='<p style=color:#888;padding:10px>Cart empty</p>';cart.forEach((p,i)=>{let d=document.createElement('div');d.className='cart-item';d.innerHTML=`<span>${p.name} - GHS ${p.price}</span><button onclick="removeCart(${i})" style="border:0;background:#fee;color:#c00;border-radius:6px;padding:4px 8px">X</button>`;list.appendChild(d);});}
+function removeCart(i){cart.splice(i,1);save();render();}
+function orderWhatsApp(){if(cart.length===0)return alert('Cart empty');let msg='Hello Arizuna Ghana! I want:%0A'+cart.map(c=>`- ${c.name} GHS ${c.price}`).join('%0A')+'%0ATotal: GHS '+cart.reduce((s,c)=>s+c.price,0);window.open('https://wa.me/233550000000?text='+msg,'_blank');}
+function adminLogin(){let p=document.getElementById('adminPass').value;if(p==='arizuna123'){isAdmin=true;localStorage.setItem('arizuna_isAdmin','1');render();}else alert('Wrong password');}
+function adminLogout(){isAdmin=false;localStorage.removeItem('arizuna_isAdmin');render();}
+function addProduct(){let n=document.getElementById('pName').value,pr=parseInt(document.getElementById('pPrice').value),cat=document.getElementById('pCat').value||'shoes',img=document.getElementById('pImg').value||'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400';if(!n||!pr)return alert('Enter name and price');products.push({name:n,price:pr,cat,img,approved:false});save();render();alert('Added, pending approval');}
+function renderAdmin(){if(!isAdmin){document.getElementById('loginBox').style.display='block';document.getElementById('adminContent').style.display='none';return;}document.getElementById('loginBox').style.display='none';document.getElementById('adminContent').style.display='block';let pend=products.filter(p=>!p.approved);document.getElementById('pendingCount').innerText=`(${pend.length})`;let pl=document.getElementById('pendingList');pl.innerHTML='';pend.forEach(p=>{let idx=products.indexOf(p);let d=document.createElement('div');d.className='cart-item';d.innerHTML=`<span>${p.name} GHS ${p.price}</span><button onclick="approve(${idx})" style="border:0;background:#006b3f;color:#fff;border-radius:6px;padding:6px 10px">Approve</button>`;pl.appendChild(d);});let all=document.getElementById('allProductsAdmin');all.innerHTML='';products.forEach((p,idx)=>{let d=document.createElement('div');d.className='cart-item';d.innerHTML=`<span>${p.name} ${p.approved?'✅':'⏳'}</span><span><button onclick="toggleApprove(${idx})" style="border:0;background:#eee;border-radius:6px;padding:4px 8px;margin-right:4px">${p.approved?'Unapprove':'Approve'}</button><button onclick="delProd(${idx})" style="border:0;background:#fee;color:#c00;border-radius:6px;padding:4px 8px">Del</button></span>`;all.appendChild(d);});}
+function approve(i){products[i].approved=true;save();render();}function toggleApprove(i){products[i].approved=!products[i].approved;save();render();}function delProd(i){if(confirm('Delete?')){products.splice(i,1);save();render();}}
+render();
+</script>
+</body>
+</html>
