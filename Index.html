@@ -1,41 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arizuna Ghana Shop</title>
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#000000">
-<style>
-body{font-family:Arial;margin:0;background:#f2f2f2}
-header{background:#000;color:#fff;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.card{background:#fff;border-radius:12px;padding:8px;text-align:center;box-shadow:0 2px 5px #0002}
-.card img{width:100%;height:120px;object-fit:cover;border-radius:8px}
-.price{color:green;font-weight:bold;margin:5px}
-button{background:#000;color:#fff;border:0;padding:8px;border-radius:6px;width:100%}
-#cart{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:10px;border-top:2px solid #000}
-</style>
-</head>
-<body>
-<header><b>ARIZUNA GHANA</b><br><small>Pay on Delivery - Accra</small></header>
-
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arizuna Ghana</title>
+<style>body{margin:0;font-family:Arial;background:#f5f5f5}header{background:#000;color:#fff;padding:16px;text-align:center}h2{margin:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}.card{background:#fff;border-radius:12px;padding:10px;text-align:center}.card img{width:100%;height:110px;object-fit:cover;border-radius:8px}.price{color:green;font-weight:bold}button{background:#000;color:#fff;border:0;padding:8px 10px;border-radius:6px;width:100%;margin-top:5px}#cart{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:10px;border-top:2px solid #000;display:none}</style></head><body>
+<header><h2>ARIZUNA GHANA</h2><small>Pay on Delivery - Accra</small></header>
 <div class="grid">
-<div class="card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"><h4>Sneakers</h4><div class="price">GHS 250</div><button onclick="add('Sneakers GHS 250')">Add to Cart</button></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400"><h4>Handbag</h4><div class="price">GHS 180</div><button onclick="add('Handbag GHS 180')">Add to Cart</button></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"><h4>Watch</h4><div class="price">GHS 220</div><button onclick="add('Watch GHS 220')">Add to Cart</button></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400"><h4>Backpack</h4><div class="price">GHS 150</div><button onclick="add('Backpack GHS 150')">Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"><div>Sneakers</div><div class="price">GHS 250</div><button onclick="add('Sneakers 250')">Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400"><div>Handbag</div><div class="price">GHS 180</div><button onclick="add('Handbag 180')">Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"><div>Watch</div><div class="price">GHS 220</div><button onclick="add('Watch 220')">Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400"><div>Backpack</div><div class="price">GHS 150</div><button onclick="add('Backpack 150')">Add to Cart</button></div>
 </div>
-
-<div id="cart" style="display:none">
-<div id="txt" style="font-size:13px"></div>
-<button onclick="order()" style="background:#25D366;margin-top:5px">Order on WhatsApp</button>
-</div>
-
-<script>
-let items=[];
-function add(i){items.push(i);document.getElementById('cart').style.display='block';document.getElementById('txt').innerText=items.join(', ')+' ('+items.length+')'}
-function order(){let m='Hello Arizuna! I want:%0A'+items.join('%0A');window.open('https://wa.me/233553688108?text='+m)}
-</script>
-</body>
-</html>
+<div id="cart"><div id="txt"></div><button onclick="order()" style="background:#25D366">Order on WhatsApp</button></div>
+<script>let i=[];function add(p){i.push(p);document.getElementById('cart').style.display='block';document.getElementById('txt').innerText=i.join(', ')+' ('+i.length+')'}function order(){window.open('https://wa.me/233553688108?text=Hello Arizuna! I want: '+i.join(', '))}</script>
+</body></html>
